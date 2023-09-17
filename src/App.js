@@ -5,26 +5,26 @@ import {mappls} from 'mappls-web-maps';
 
 function App() {
 
-    const [location, setLocation] = useState(null);
-
-    useEffect(() => {
-        // Check if the Geolocation API is available in the browser
-        if ('geolocation' in navigator) {
-            // Use the Geolocation API to get the current location
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setLocation({ latitude, longitude });
-                    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`)
-                },
-                (error) => {
-                    console.error('Error getting location:', error);
-                }
-            );
-        } else {
-            console.error('Geolocation is not available in your browser.');
-        }
-    }, []);
+    // const [location, setLocation] = useState(null);
+    //
+    // useEffect(() => {
+    //     // Check if the Geolocation API is available in the browser
+    //     if ('geolocation' in navigator) {
+    //         // Use the Geolocation API to get the current location
+    //         navigator.geolocation.getCurrentPosition(
+    //             (position) => {
+    //                 const {latitude, longitude} = position.coords;
+    //                 setLocation({latitude, longitude});
+    //                 console.log(`Latitude: ${latitude}, Longitude: ${longitude}`)
+    //             },
+    //             (error) => {
+    //                 console.error('Error getting location:', error);
+    //             }
+    //         );
+    //     } else {
+    //         console.error('Geolocation is not available in your browser.');
+    //     }
+    // }, []);
 
     const styleMap = {width: '99%', height: '99vh', display: 'inline-block'}
     const mapProps = {center: [28.6330, 77.2194], traffic: false, zoom: 3, geolocation: false, clickableIcons: false}
@@ -62,12 +62,11 @@ function App() {
             // });
 
 
-
             if ('geolocation' in navigator) {
                 // Use the Geolocation API to get the current location
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        const { latitude, longitude } = position.coords;
+                        const {latitude, longitude} = position.coords;
                         let currentLocation = mapplsClassObject.Marker({
                             map: mapObject,
                             position: {
@@ -138,8 +137,58 @@ function App() {
         })
     });
 
-    const handleAdd = () => {
+    const [pts, setPts] = useState([])
 
+    const handleAdd = () => {
+        if ('geolocation' in navigator) {
+            // Use the Geolocation API to get the current location
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const {latitude, longitude} = position.coords;
+                    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`)
+
+                    // let currentLocation = mapplsClassObject.Marker({
+                    //                     map: mapObject,
+                    //     position: {
+                    //         lat: latitude,
+                    //         lng: longitude
+                    //     },
+                    //     popupHtml: 'Current Location',
+                    // });
+
+                    setPts((prev) => [...prev, {lat: latitude, lng: longitude}])
+
+
+                    let polylineObject = mapplsClassObject.Polyline(
+                        {
+                            map: mapObject,
+                            path: pts,
+                            strokeColor: '#f1d608',
+                            strokeOpacity: 1.0,
+                            strokeWeight: 10,
+                        }
+                    );
+
+
+                    fetch("http://gis.radr.in/line/1/add_point/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            "lat": latitude,
+                            "long": longitude,
+                        }),
+                    }).then(res => res.json())
+                        .then(data => {
+                                console.log(data)
+                            }
+                        ).catch(err => {
+                        console.log(err)
+                    })
+                },
+            );
+        }
     }
 
 
