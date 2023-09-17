@@ -2,6 +2,7 @@ import './App.css';
 import React, {useEffect, useState} from 'react';
 import {mappls} from 'mappls-web-maps';
 
+const BASE_URL = "https://gis.radr.in"
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
     //
     useEffect(() => {
 
-        fetch("http://gis.radr.in/line/1/", {
+        fetch("https://gis.radr.in/line/1/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -184,7 +185,7 @@ function App() {
                     );
 
 
-                    fetch("http://gis.radr.in/line/1/add_point/", {
+                    fetch("https://gis.radr.in/line/1/add_point/", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
