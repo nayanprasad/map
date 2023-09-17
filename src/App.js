@@ -5,10 +5,25 @@ import {mappls} from 'mappls-web-maps';
 
 function App() {
 
+    const [pts, setPts] = useState([])
+
     // const [location, setLocation] = useState(null);
     //
-    // useEffect(() => {
-    //     // Check if the Geolocation API is available in the browser
+    useEffect(() => {
+
+        fetch("http://gis.radr.in/line/1/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then(res => res.json())
+            .then(data => {
+                    console.log(data)
+                    setPts(data.points)
+                }
+            ).catch(err => {
+            console.log(err)
+        })    //     // Check if the Geolocation API is available in the browser
     //     if ('geolocation' in navigator) {
     //         // Use the Geolocation API to get the current location
     //         navigator.geolocation.getCurrentPosition(
@@ -24,7 +39,7 @@ function App() {
     //     } else {
     //         console.error('Geolocation is not available in your browser.');
     //     }
-    // }, []);
+    }, []);
 
     const styleMap = {width: '99%', height: '99vh', display: 'inline-block'}
     const mapProps = {center: [28.6330, 77.2194], traffic: false, zoom: 3, geolocation: false, clickableIcons: false}
@@ -137,7 +152,6 @@ function App() {
         })
     });
 
-    const [pts, setPts] = useState([])
 
     const handleAdd = () => {
         if ('geolocation' in navigator) {
@@ -177,7 +191,7 @@ function App() {
                         },
                         body: JSON.stringify({
                             "lat": latitude,
-                            "long": longitude,
+                            "lng": longitude,
                         }),
                     }).then(res => res.json())
                         .then(data => {
@@ -195,7 +209,7 @@ function App() {
     return (
         <div>
             <div id="map" style={styleMap}></div>
-            <div className={"addBtn"} onClick={handleAdd}>ADD</div>
+            <div className={"addBtn"} onClick={handleAdd}></div>
         </div>
     );
 }
