@@ -5,7 +5,7 @@ import {mappls} from 'mappls-web-maps';
 function App() {
 
     const styleMap = {width: '99%', height: '99vh', display: 'inline-block'}
-    const mapProps = {center: [28.6330, 77.2194], traffic: false, zoom: 4, geolocation: false, clickableIcons: false}
+    const mapProps = {center: [28.6330, 77.2194], traffic: false, zoom: 10, geolocation: false, clickableIcons: false}
     var mapObject;
     var mapplsClassObject = new mappls();
 
@@ -13,10 +13,32 @@ function App() {
         mapObject = mapplsClassObject.Map({id: "map", properties: mapProps});
         mapObject.on("load", () => {
 
-            let markerObject = mapplsClassObject.Marker({
+            // let markerObject = mapplsClassObject.Marker({
+            //     map: mapObject,
+            //     position: {lat: 28.5512908, lng: 77.26809282}
+            // });
+
+            let start = mapplsClassObject.Marker({
                 map: mapObject,
-                position: {lat: 28.5512908, lng: 77.26809282},
+                position: {lat: 28.55108, lng: 77.26913},
+                popupHtml: 'Pipe1',
             });
+
+            let end = mapplsClassObject.Marker({
+                map: mapObject,
+                position: {lat: 28.55179, lng: 77.26753},
+                popupHtml: 'Pipe2',
+            });
+
+            let valve = mapplsClassObject.Marker({
+                map: mapObject,
+                position: {
+                    lat: 28.55099,
+                    lng: 77.26849
+                },
+                popupHtml: 'Valve',
+            });
+
 
             var pts =
                 [
@@ -45,26 +67,6 @@ function App() {
                         lng: 77.26831
                     },
                     {
-                        lat: 28.55093,
-                        lng: 77.26794
-                    },
-                    {
-                        lat: 28.55089,
-                        lng: 77.2676
-                    },
-                    {
-                        lat: 28.55123,
-                        lng: 77.26756
-                    },
-                    {
-                        lat: 28.55145,
-                        lng: 77.26758
-                    },
-                    {
-                        lat: 28.55168,
-                        lng: 77.26758
-                    },
-                    {
                         lat: 28.55175,
                         lng: 77.26759
                     },
@@ -82,10 +84,9 @@ function App() {
                 {
                     map: mapObject,
                     path: pts,
-                    strokeColor: '#333',
+                    strokeColor: '#f1d608',
                     strokeOpacity: 1.0,
                     strokeWeight: 10,
-                    // fitbounds: true,
                 }
             );
 
