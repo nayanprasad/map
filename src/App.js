@@ -9,11 +9,11 @@ function App() {
     const styleMap = {width: '99%', height: '99vh', display: 'inline-block'}
     const mapProps = {center: [28.6330, 77.2194], traffic: false, zoom: 3, geolocation: false, clickableIcons: false}
 
-
+    const [isChanged, setIsChanged] = useState(false)
     const [pts, setPts] = useState([])
 
     // const [location, setLocation] = useState(null);
-    //
+
     useEffect(() => {
 
         var mapObject;
@@ -218,7 +218,7 @@ function App() {
     //     } else {
     //         console.error('Geolocation is not available in your browser.');
     //     }
-    }, []);
+    }, [isChanged]);
 
     useEffect(() => {
         console.log(pts)
@@ -271,6 +271,7 @@ function App() {
                     }).then(res => res.json())
                         .then(data => {
                                 console.log(data)
+                                setIsChanged(!isChanged)
                             }
                         ).catch(err => {
                         console.log(err)
